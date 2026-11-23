@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apex Website Standard</title>
+<style>
+:root{
+  --bg:#f4f5f7; --panel:#ffffff; --ink:#18212b; --muted:#5d6876; --line:#d3d9e0;
+  --g1:#e4e8ee; --g2:#cdd4dd; --g3:#aab4c0; --dark:#2a333e; --darkInk:#ffffff; --darkMuted:#a9b3bf;
+  --accent:#1f6feb; --accentInk:#ffffff; --pend:#8a5a00; --pendBg:#fff1c7; --no:#b42318; --noBg:#fdecea;
+  --gel:#1a7f5a; --gelBg:#e6f6ef; --std:#6b3fb5; --stdBg:#f1ebfb; --add:#0b6b8a; --addBg:#e3f4fa;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1319; --panel:#161c24; --ink:#e6ebf1; --muted:#9ba7b5; --line:#2b3540;
+    --g1:#222b36; --g2:#2e3946; --g3:#465464; --dark:#0a0e13; --darkMuted:#8995a3;
+    --accent:#4d8dff; --pend:#ffcf66; --pendBg:#3a2d0c; --no:#ff8a80; --noBg:#3a1a18;
+    --gel:#5fd1a4; --gelBg:#10291f; --std:#c3a6ff; --stdBg:#22183a; --add:#6cd0f0; --addBg:#0d2730;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1319; --panel:#161c24; --ink:#e6ebf1; --muted:#9ba7b5; --line:#2b3540;
+  --g1:#222b36; --g2:#2e3946; --g3:#465464; --dark:#0a0e13; --darkMuted:#8995a3;
+  --accent:#4d8dff; --pend:#ffcf66; --pendBg:#3a2d0c; --no:#ff8a80; --noBg:#3a1a18;
+  --gel:#5fd1a4; --gelBg:#10291f; --std:#c3a6ff; --stdBg:#22183a; --add:#6cd0f0; --addBg:#0d2730;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+.top{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.top h1{font-size:18px;margin:0;flex:1 1 260px}
+.top h1 small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.toggle button{border:0;background:transparent;padding:7px 14px;cursor:pointer}
+.toggle button.on{background:var(--accent);color:var(--accentInk)}
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 58px)}
+nav.side{border-right:1px solid var(--line);background:var(--panel);padding:10px 8px;position:sticky;top:58px;align-self:start;max-height:calc(100vh - 58px);overflow:auto}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 8px 4px}
+nav.side button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:14px}
+nav.side button:hover{background:var(--g1)}
+nav.side button.on{background:var(--accent);color:var(--accentInk)}
+main{padding:20px 16px 70px;min-width:0}
+.ptitle{font-size:26px;margin:0 0 2px}
+.pdesc{color:var(--muted);margin:0 0 14px;max-width:860px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.meta span{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 9px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:13px;height:13px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+.layers{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.layers.phone{grid-template-columns:375px minmax(0,1fr) minmax(0,1fr)}
+.col h3{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.own{font-size:11px;font-weight:700;border-radius:10px;padding:1px 8px;border:1px solid}
+.own.dev{color:var(--accent);border-color:var(--accent)}
+.own.gel{color:var(--gel);border-color:var(--gel);background:var(--gelBg)}
+.own.std{color:var(--std);border-color:var(--std);background:var(--stdBg)}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.box.gelb{border-top:3px solid var(--gel)}
+.box.stdb{border-top:3px solid var(--std)}
+.box h4{margin:10px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.box h4:first-child{margin-top:0}
+.box p{margin:4px 0}
+ol.sec{margin:4px 0;padding-left:20px}
+ol.sec li{margin:3px 0}
+.hl{display:inline-block;min-width:24px;font-size:10.5px;font-weight:700;color:var(--gel);border:1px solid var(--gel);border-radius:4px;padding:0 4px;margin-right:4px;text-align:center}
+ul.rules{list-style:none;padding:0;margin:0}
+ul.rules li{padding:7px 0;border-bottom:1px solid var(--g1)}
+ul.rules li:last-child{border-bottom:0}
+.cite{display:block;font-size:12px;color:var(--muted)}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:10px;padding:0 7px;margin-left:4px;vertical-align:1px;border:1px solid}
+.tag.p{background:var(--pendBg);color:var(--pend);border-color:var(--pend)}
+.tag.a{background:var(--addBg);color:var(--add);border-color:var(--add)}
+.tag.r{background:var(--noBg);color:var(--no);border-color:var(--no)}
+.chapter{max-width:960px}
+.chapter section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.chapter section h3{margin:0 0 6px;font-size:16px}
+table.own-t{width:100%;border-collapse:collapse;font-size:14px}
+table.own-t th,table.own-t td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.own-t th{background:var(--g1)}
+.pendcard{background:var(--pendBg);border:1px solid var(--pend);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.pendcard h3{margin:0 0 4px;font-size:15px;color:var(--pend)}
+.pendcard p{margin:3px 0;font-size:14px}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:6px 0 6px 34px}
+.steps li:before{content:counter(s);position:absolute;left:0;top:5px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;text-align:center;line-height:24px;font-size:12px;font-weight:700}
+.mini{max-width:820px;margin:6px 0 14px}
+.wf{border:2px solid var(--g3);border-radius:10px;overflow:hidden;background:var(--panel);container-type:inline-size}
+.navmini{display:none;font-size:11px;color:var(--muted)}
+@container (max-width:520px){ .nav{display:none} .navmini{display:inline} }
+.note{display:block;font-size:11.5px;color:var(--accent);font-weight:600;margin-top:6px}
+.note.p{color:var(--pend)}
+.blk{padding:12px 14px;border-bottom:1px dashed var(--g2);position:relative}
+.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:7px;display:flex;justify-content:space-between;gap:8px}
+.lbl i{font-style:normal;color:var(--accent);font-weight:700}
+.h2{height:13px;width:45%;background:var(--g3);border-radius:3px;margin-bottom:7px}
+.ln{height:7px;background:var(--g2);border-radius:3px;margin:5px 0}
+.ln.s{width:60%}.ln.m{width:80%}
+.img{background:var(--g2);border-radius:6px;min-height:80px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
+.row{display:flex;gap:8px}
+.row > *{flex:1 1 0;min-width:0}
+.card{background:var(--g1);border-radius:8px;padding:7px}
+.card .img{min-height:54px;margin-bottom:5px}
+.card .t{font-size:12px;font-weight:700;margin:2px 0 4px}
+.btn{display:inline-block;background:var(--accent);color:var(--accentInk);border-radius:16px;padding:3px 11px;font-size:12px;font-weight:600;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+.hdr{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px dashed var(--g2);position:relative}
+.logo{font-weight:800;font-size:11.5px;border:1.5px dashed var(--muted);border-radius:4px;padding:3px 6px;white-space:nowrap}
+.nav{display:flex;gap:1px;flex:1;flex-wrap:wrap;overflow:hidden}
+.nav span{font-size:11px;padding:2px 5px;white-space:nowrap}
+.nav span.dd:after{content:" \25BE";color:var(--muted)}
+.burger{display:flex;flex-direction:column;gap:3px;padding:5px}
+.burger i{display:block;width:18px;height:2px;background:var(--ink)}
+.callic{font-size:11px;border:1px solid var(--line);border-radius:12px;padding:2px 8px;margin-left:auto}
+.ddmenu{position:absolute;background:var(--panel);border:1px solid var(--g3);border-radius:6px;padding:5px;font-size:12px;box-shadow:0 6px 18px rgba(0,0,0,.12);z-index:2}
+.ddmenu div{padding:2px 8px}
+.mmenu{background:var(--panel);border-top:1px dashed var(--g2);padding:6px 12px;font-size:13px}
+.mmenu div{padding:4px 0;border-bottom:1px solid var(--g1)}
+.mmenu .sub{padding-left:14px;color:var(--muted);font-size:12px}
+.hero{background:var(--dark);color:var(--darkInk);text-align:center;padding:40px 14px;position:relative;border-bottom:1px dashed var(--g2)}
+.hero.inner{padding:26px 14px}
+.hero .vid{position:absolute;top:7px;left:9px;font-size:9.5px;letter-spacing:.06em;color:var(--darkMuted);border:1px solid var(--darkMuted);border-radius:3px;padding:1px 5px}
+.hero .h1{font-size:20px;font-weight:800;margin:0 0 6px}
+.hero .subt{color:var(--darkMuted);font-size:13px;margin-bottom:10px}
+.hero .note{color:#9cc2ff}
+.band{background:var(--dark);color:var(--darkInk)}
+.band .lbl{color:var(--darkMuted)}
+.band .note{color:#9cc2ff}
+.band .note.p{color:#ffcf66}
+.ctaband{background:var(--accent);color:var(--accentInk);text-align:center;padding:18px 14px}
+.ctaband .h2{background:rgba(255,255,255,.7);margin:0 auto 9px}
+.ctaband .btn{background:#fff;color:#1f3f7a}
+.ctaband .lbl{color:rgba(255,255,255,.85);justify-content:center}
+.ctaband .note{color:#fff}
+.ctaband .note.p{color:#fff3c4}
+.field{height:20px;border:1px solid #56626f;border-radius:4px;margin:4px 0;background:rgba(255,255,255,.06)}
+.light .field{border-color:var(--g3);background:var(--panel)}
+.chk{font-size:11px;color:var(--darkMuted);margin:3px 0;display:flex;gap:6px;align-items:flex-start}
+.light .chk{color:var(--muted)}
+.chk:before{content:"";width:11px;height:11px;border:1.5px solid currentColor;border-radius:2px;flex:0 0 auto;margin-top:2px}
+.small{font-size:11px;color:var(--muted)}
+.band .small{color:var(--darkMuted)}
+.faqr{display:flex;justify-content:space-between;background:var(--g1);border-radius:5px;padding:5px 9px;margin:4px 0;font-size:12px}
+.faqr:after{content:"+";color:var(--muted)}
+.more{font-size:12px;color:var(--muted);text-align:center;margin-top:3px}
+.logos{display:flex;gap:7px}
+.logos div{flex:1;height:30px;border:1.5px solid #8c97a5;border-radius:4px;background:rgba(255,255,255,.06)}
+.chip{display:inline-block;background:var(--g1);border:1px solid var(--g2);border-radius:12px;padding:1px 8px;font-size:11.5px;margin:2px 3px 2px 0}
+.chip.link{color:var(--accent);border-color:var(--accent);background:transparent}
+.step{background:var(--g1);border-radius:8px;padding:7px;text-align:center;font-size:12px}
+.step b{display:block;font-size:15px;color:var(--accent)}
+.nofaq{border:2px dashed var(--no);background:var(--noBg);color:var(--no);text-align:center;font-weight:700;font-size:13px;padding:9px;margin:8px 14px;border-radius:6px}
+.fcols{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1.2fr;gap:10px;font-size:11px}
+.fcols .ft{font-weight:700;margin-bottom:3px;color:var(--darkInk)}
+.fcols div div{color:var(--darkMuted);padding:1px 0}
+.fbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid #45505d;margin-top:10px;padding-top:7px;font-size:11px;color:var(--darkMuted)}
+.fbar u{color:#9cc2ff}
+.map{background:repeating-linear-gradient(45deg,var(--g1),var(--g1) 8px,var(--g2) 8px,var(--g2) 16px);border-radius:6px;min-height:64px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+.slider{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
+.slider > *{flex:0 0 78%;scroll-snap-align:start}
+.dots{text-align:center;font-size:13px;color:var(--muted);letter-spacing:3px}
+.quote{font-size:12px;color:var(--muted);font-style:italic}
+.phone .split{grid-template-columns:1fr}
+.phone .fcols{grid-template-columns:1fr}
+.phone .stack{flex-direction:column}
+@media (max-width:1250px){
+  .layers,.layers.phone{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .layers .col.wire{grid-row:span 2}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  nav.side{position:static;max-height:none;display:flex;gap:4px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+  nav.side .grp{display:none}
+  nav.side button{width:auto;white-space:nowrap;flex:0 0 auto}
+  .layers,.layers.phone{grid-template-columns:minmax(0,1fr)}
+  .layers .col.wire{grid-row:auto}
+  .nav{display:none}
+  .fcols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:480px){
+  .split{grid-template-columns:1fr}
+  .fcols{grid-template-columns:1fr}
+  .top h1 small{display:none}
+  .ptitle{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Apex Website Standard<small>One guide for every Apex website: layout, content and team standards. Example client: Example Builders.</small></h1>
+  <div class="toggle" role="group" aria-label="Wireframe size">
+    <button id="bDesk" class="on" type="button">Desktop</button>
+    <button id="bPhone" type="button">Phone</button>
+  </div>
+</div>
+<div class="layout">
+  <nav class="side" id="side" aria-label="Guide chapters"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+(function(){
+/* ======================= GUIDE DATA ======================= */
+var LAST_UPDATED = "Nov 23, 2026 (LA)";
+var SOURCES = [
+ "Layout workflow, workflows/developer-layout-workflow.md (Nov 23, with Aryan's Nov 23 rulings)",
+ "Gelmarc's Page-by-Page Website Workflow, Google Doc 1vcfNmyldq5y0H_mADSxokD2qe-twiWL6KUfbT4_yVi4 (Start Here and DRAFT 01 to 15, read Nov 23)",
+ "Aryan's final rulings, Nov 23 (13 rulings, relayed by the QC controller chat)",
+ "Published sites case study, workflows/published-sites-case-study-2026-11-23.md (20 live Apex sites, 796 pages: the de facto standard)",
+ "Layout workflow audit, workflows/layout-workflow-audit-2026-11-23.md (30 missing team rules; its 11 conflicts now ruled)",
+ "Team rules, HQ/Rules.md (Slack, Podio and huddle rules, LA dates, as of Nov 23)",
+ "Huddle notes, workflows/huddle-2026-11-20/NOTES.md (format call and team huddle, Nov 20)",
+ "Huddle context, claude-context/huddle-context/ (Nov 2, 3, 4, 6, 9, 11, 12, 18 huddles)"
+];
+
+/* Citations: who, LA date, source. Tags: P = Pending Aryan, A = added from the Nov 23 audit (a team rule missing from the old workflow), R = replaced */
+function R(t,c,tag){ return {t:t,c:c,tag:tag||""}; }
+
+var CH = {};
+
+CH.owners = {name:"Who owns what", grp:"Start here", desc:"Every rule in this guide belongs to one owner. When in doubt, the owner's latest word counts.",
+ html:function(){ return '<div class="chapter"><section><table class="own-t"><tr><th>Who</th><th>Owns</th><th>Source</th></tr>'+
+ '<tr><td><b>Developer</b> (Aryan, John)</td><td>Layout: header, menu, hero, section order, forms, buttons, footer, page types, Duda build, cookie banner and Termly, photos, layout QC and fixes.</td><td class="small">Mary, Nov 20 call and Slack; Mary, Oct 26 (photos); QC playbook section 1</td></tr>'+
+ '<tr><td><b>Gelmarc</b></td><td>Content and SEO: copy, headings, FAQs, page and service names, metadata, schema, keyword map, GBP, GA4 and GTM (after launch). Updates content on Duda directly.</td><td class="small">Mary, Nov 19 and 20, Slack; Mary and Gelmarc, Nov 13, Slack</td></tr>'+
+ '<tr><td><b>Mary</b></td><td>Client facts, scope and page count, process, the final review after QC, policy wording questions.</td><td class="small">QC playbook section 1; Mary, Nov 20, Slack</td></tr>'+
+ '<tr><td><b>Anthony</b></td><td>Site standards, design direction and approvals (usually through Mary or the huddle). Rebrands start with him.</td><td class="small">Mary, Nov 4 and Nov 18, Slack</td></tr>'+
+ '<tr><td><b>Paid ads team</b></td><td>The master format for opt-ins, Privacy Policy and Terms.</td><td class="small">Mary, Nov 5 and Nov 21, Slack; Gelmarc\'s Start Here</td></tr>'+
+ '</table></section>'+
+ rulesSection("Ownership rules",[
+  R("Developers keep their own layout workflow; Gelmarc keeps his content workflow. Once both are ready, every ongoing project runs through both.","Mary, Nov 20, Slack and format call"),
+  R("Gelmarc updates content and SEO directly on Duda and asks the developer only when layout is affected.","Mary, Nov 19, repeated Nov 20, Slack"),
+  R("Content route: the developer drafts the first content using Gelmarc's workflow, then Gelmarc audits it. After that, content updates are Gelmarc's.","Aryan, Nov 23; Mary, Nov 17, Slack"),
+  R("Aryan focuses on QC and client revisions; John takes new project development. Aryan can port John's designs to Duda.","Mary, Nov 16, Slack; Nov 20 team huddle"),
+  R("Content questions go to Gelmarc; if he must act, assign him a Podio task.","Mary, Oct 20, Slack"),
+  R("Know your role and which tasks are yours.","Mary, Nov 17, Slack")
+ ])+'</div>'; }};
+
+CH.before = {name:"Before building", grp:"Start here", desc:"Get the facts from Podio first. The project's Website Pages document decides which pages exist.",
+ rules:[
+  ["Podio facts",[
+   R("Open the Podio project and read every field, file, comment, task and attachment: client profile, website type, page list, folder, onboarding, brief, brand files.","Mary, Nov 20, Slack"),
+   R("The Podio Website Pages document decides the pages. Build exactly that list. S.R. Freeman is a good structure sample but a large site: copy its structure, never its page count.","Aryan, Nov 23 ruling; Mary, Nov 20, Slack"),
+   R("Privacy and policy pages do not count toward the page total.","Mary, Nov 20, Slack"),
+   R("A page beyond the list (for example asked for in a meeting) goes to Mary for scope confirmation before building. Pruneyard's room pages became a section and stayed drafts.","Mary, Nov 20, Slack"),
+   R("Business details (name, phone, email, address, hours, license, social links, GBP) come only from Podio files and onboarding. Never assume or copy a detail from the web. No business address in Podio means a service-area site (Chendo: service areas, no home address). Ask Mary only for what is truly missing.","Aryan, Nov 23 ruling; layout workflow section 0"),
+   R("For a redesign, save screenshots of the old site before starting.","Mary, Nov 12 team meeting","A"),
+   R("For a migration or rebrand, map every old URL to its new destination (301 redirects).","Gelmarc's Start Here; Mary, Nov 8 (QC rule R9)")
+  ]],
+  ["Brand",[
+   R("The client's brand guide wins over any reference: official logo files, exact colours, only the guide's fonts (serif headings included). Remove marks that are not official.","Aryan, Nov 13 and Nov 23 ruling; Mary (Anthony), Truehaven, Nov 19, Slack"),
+   R("No logo files yet: ask Mary to request them, and meanwhile match colours from the client's business card or existing materials.","Anthony, Nov 6 huddle","A"),
+   R("Branding check before any design: \u201cprojects requiring rebranding route through Anthony first, while pre-branded projects route directly to the developer.\u201d Has branding: straight to the developer. Needs rebranding: Anthony first, then the developer once his approved branding arrives.","Mary (relaying Anthony's huddle), Nov 18, Slack"),
+   R("Examples: REF Builders, \u201cDevelopment will use REF Builders' existing branding.\u201d Truehaven, the cross-shaped T icon was removed because \u201cit wasn't part of the official branding.\u201d","Mary, Nov 9 (REF Builders); Mary relaying Anthony, Nov 19 (Truehaven), Slack")
+  ]],
+  ["References",[
+   R("Structure comes from launched Apex sites only (S.R. Freeman, Casa Mora, Legacy, Immaculate Cleaning). Never use unpublished drafts as references.","Mary, Nov 20 format call and team huddle"),
+   R("Design references (ThemeForest, Envato, any site) give the look only, never the page format or content. Pick a different reference per project, or per section.","Mary, Nov 20 and Nov 18, Slack"),
+   R("Each site must look different from earlier Apex sites; never reuse the same section designs across clients.","Anthony, Nov 11 huddle; Mary, Nov 18 huddle","A"),
+   R("WordPress clients: same rules, built so it is easy to rebuild in WordPress and Elementor.","Mary, Nov 20 format call")
+  ]],
+  ["Before any Duda edit",[
+   R("Save a native Site Backup inside the Duda editor and record its name and date. Never duplicate the site on the dashboard.","Mary, Nov 16 and Nov 18, Slack; Gelmarc's Start Here","A")
+  ]]
+ ]};
+
+CH.concepts = {name:"Concepts to Anthony", grp:"Start here", desc:"How a new site goes from brief to an approved direction before the full build.",
+ rules:[
+  ["New website flow",[
+   R("(1) Onboarding and Anthony's Creative Direction Form, developer reviews scope. (2) Gelmarc prepares SEO and content requirements. (3) Developer makes initial content and layout options, Gelmarc refines. (4) Anthony approves the direction before the full Duda build. (5) Build: developer layout and function, Gelmarc content and metadata. (6) QC: developer across devices, Gelmarc SEO. (7) Launch, then check the live site.","Mary, Nov 18, Slack"),
+   R("Present design concepts to Anthony before building the full site. Development starts once the direction is approved.","Anthony, Nov 4 huddle; Mary, Nov 12 team meeting","A"),
+   R("Two clearly different design directions per client (not 4, not 50).","Mary (Anthony), Nov 12, Slack"),
+   R("Give Aryan per-section options (hero, about, services, footer) to mix and match before merging the final build.","Aryan, Nov 13","A"),
+   R("Be confident in a design before presenting it. Only finished work goes in channels Anthony reads.","Mary, Oct 29, Slack; Nov 20 team huddle"),
+   R("Post finished builds in #ai-web-dev and tag Anthony; Aryan approves the exact text first.","Mary, Nov 6, Slack; Aryan's own rule"),
+   R("Trial plan, 10 weekdays: days 1 to 2 design, day 3 Anthony review, days 4 to 6 build and revisions, days 7 to 8 Gelmarc review, days 9 to 10 revisions, QC and final approval.","Mary, Nov 6, Slack"),
+   R("Content route: the developer drafts the first content using Gelmarc's workflow, then Gelmarc audits it.","Aryan, Nov 23"),
+   R("Does the 4-day clock after concept approval still apply? To decide later, with Anthony.","Task 319234546 draft, Nov 21","N")
+  ]]
+ ]};
+
+CH.staging = {name:"GitHub and staging", grp:"Start here", desc:"Designs live in the Apex GitHub org and a staging site first. Duda stays the production platform.",
+ rules:[
+  ["Rules",[
+   R("Push each design direction to an Apex GitHub org repo and a staging preview before Duda.","Mary (Anthony), Nov 12, Slack; Anthony, Nov 11 huddle","A"),
+   R("Builds live in the Apex GitHub org, never personal repos. GitHub and hosting access is for developers only.","Aryan, Nov 17, Slack; Mary, Nov 18, Slack"),
+   R("Save the repo URL and current staging URL in the Podio project's own fields, not only in comments.","Mary (Anthony), Nov 13, Slack; Mary, Nov 18 huddle"),
+   R("Before logging off: push the latest work, update the staging preview, then post the Podio update with repo and preview links.","Mary (Anthony), Nov 18, Slack"),
+   R("Staging host: whichever fits: Hostinger, Cloudflare Pages, Vercel or GitHub Pages (Pruneyard and Truehaven use Vercel, JM Lara uses Hostinger). Repo and staging links both go in the Podio fields.","Aryan, Nov 24")
+  ]],
+  ["Replaced",[
+   R("Old: the reviewed prototype is built straight in Duda. Replaced by a GitHub repo and a staging preview first, then Duda.","Anthony, Oct 15; replaced by Mary (Anthony), Nov 12","R")
+  ]]
+ ]};
+
+CH.content = {name:"Content and SEO rules", grp:"Start here", desc:"Gelmarc owns this layer. The developer follows it in the first build prompt and never rewrites it later.",
+ rules:[
+  ["Rules for every page (Gelmarc owns)",[
+   R("One H1 for the page title, H2 for main sections, H3 for items in a section, H4 only under H3. Never copy skipped levels from a reference.","Gelmarc's Start Here"),
+   R("Clear, factual copy. No repeated paragraphs, forced city mentions or unsupported claims. Only verified services, locations, credentials, reviews and project details. Flag missing information instead of inventing it.","Gelmarc's Start Here"),
+   R("Approved CTA wording with a verified destination. Every card, button and menu item is a crawlable link (a tag with a real href) with descriptive text. Menu and footer links do not replace useful links in the body.","Gelmarc's Start Here","A"),
+   R("Keep approved content that does not need revision. Never change an existing URL just to match a new heading.","Gelmarc's Start Here"),
+   R("FAQ: 10 on every non-project page, 20 on the FAQ page, none on Projects or project pages. If 10 is not possible without filler, flag it for review before handoff.","Gelmarc's Start Here; Mary asked for counts, Nov 21, Slack"),
+   R("Keyword planning: search intent, primary and supporting keywords and target location before writing. 15 related keywords when requested, never shown in public copy.","Gelmarc's Start Here"),
+   R("Revisions: label each change ADDED, REVISED, REMOVED or NOT CHANGED and check knock-on effects on metadata, links, FAQs, forms, schema and CTAs.","Gelmarc's Start Here")
+  ]],
+  ["Metadata targets (Apex editorial rules)",[
+   R("Unique title and description per page. Title about 50 to 55 characters, description about 130 to 135, H1 about 50 to 55, H2 and H3 about 65 to 70.","Gelmarc's Start Here"),
+   R("Page title format: Page Title + Primary Service Area or Location | Company Name. Meta titles include the location.","Gelmarc, Nov 3, Slack; Anthony, Oct 8, Slack"),
+   R("Dynamic collection pages need their own meta title and description through the collection columns.","Mary, Oct 28, Slack")
+  ]],
+  ["Statuses",[
+   R("Use the exact status: Draft Copy, Approved Copy, Verified Saved Preview or Verified Live Page. Form delivery counts only after an authorized test and receipt check.","Gelmarc's Start Here")
+  ]]
+ ]};
+
+CH.live = {name:"What live sites do", grp:"Start here", desc:"The de facto standard from 20 launched Apex sites (796 pages, read Nov 23). Used for anything Aryan's rulings do not cover.",
+ rules:[
+  ["Header and hero",[
+   R("Logo left on 16 of 20; centred with a split menu on 4.","Case study, Nov 23"),
+   R("Menu Home, About, Services, Projects, Service Areas, Contact on 15 of 20; FAQ and Blog inside the About dropdown on 17 of 20; Financing top level on 4.","Case study, Nov 23"),
+   R("One header button on 15 of 20: call on 8, contact on 7. Contact buttons go to the Contact page form anchor.","Case study, Nov 23"),
+   R("Video hero on 16 of 20; H1, subtitle and one button on 13. Hero buttons go to the Contact page form on 14 of 17.","Case study, Nov 23")
+  ]],
+  ["Pages and forms",[
+   R("Homepage FAQ has exactly 10 on 18 of 20. Projects and project pages have 0 FAQs on nearly all.","Case study, Nov 23"),
+   R("Footer form band on 17 of 20. Global footer hidden on Contact on 16 of 17, closed by a page-level footer copy.","Case study, Nov 23"),
+   R("Two SMS boxes, non-marketing first, never pre-ticked, on 17 of 20; required on 13 of 17. Privacy and Terms under submit on 18 of 20.","Case study, Nov 23"),
+   R("Service Areas parent page with its own layout on 15 of 16 sites that have city pages.","Case study, Nov 23"),
+   R("One H1 on core pages on 17 of 20. The Termly cookie embed adds a second H1 on Cookie Policy pages.","Case study, Nov 23")
+  ]],
+  ["Footer",[
+   R("Street address on 16 of 20; city or region only on 4 (Chendo, Good Day, One Time, Nuvo). City links in the footer on only 5.","Case study, Nov 23"),
+   R("License on 8, hours on 3, map on 13, social icons on 17 of 20.","Case study, Nov 23"),
+   R("Credit line exactly \u00a9 2026 Company | Designed & Managed by Apex Operations on 15 of 20, linked on all 20.","Case study, Nov 23")
+  ]]
+ ]};
+
+CH.header = {name:"Header", grp:"Global", desc:"The same global header on every page. Menu items come only from the Podio Website Pages document.", wire:"header",
+ rules:[
+  ["Header checklist",[
+   R("Official logo top left (16 of 20 live sites), or centred with a split menu if it suits the client (Legacy, Immaculate, Innovation, Pacific Terrascape).","Mary, Nov 20 format call; case study"),
+   R("Straightforward one-line menu on desktop, main pages and subpages clearly separate, no unnecessary buttons.","Mary (Anthony), Nov 20 format call"),
+   R("Menu order: Home, About, Services, Projects, Service Areas, Contact, plus Financing when the client has it. FAQ and Blog sit inside the About dropdown, not at the top level.","Aryan, Nov 23 ruling; 17 of 20 live sites (case study)"),
+   R("Home is always the first menu item, on every page.","Mary, Nov 20 format call"),
+   R("Every parent page (About with FAQ and Blog, Services, Projects, Service Areas) gets a dropdown listing all its subpages with the exact page names. Check against the page list, not the design.","Aryan, Nov 13; Mary, Nov 20 call"),
+   R("Nothing else inside the Services dropdown. Extra page groups (for example room pages) get their own dropdown.","Anthony, Nov 16 (Pruneyard)"),
+   R("A Service Areas menu item holds the city pages; area navigation must be easy.","Mary, Oct 28 and 29, Slack"),
+   R("One header button: a call button (tel:) or a contact button that goes to the Contact page form.","Aryan, Nov 23 ruling; 15 of 20 live sites (case study)"),
+   R("Phone as a tap-to-call link (tel:), email as mailto: if shown. Real numbers only.","Layout workflow section 1"),
+   R("Phone menu has the same items and dropdowns, with readable submenus. Header shrinks on scroll.","Layout workflow section 1"),
+   R("Same global header on every page, including inner pages like Client Training.","Mary, Nov 20, Podio"),
+   R("Every dropdown opens by hover and by keyboard.","Anthony, Nov 9 huddle (accessibility)","A")
+  ]],
+  ["When pages are added",[
+   R("A new project or city page is added in the same change to its dropdown, the homepage section, the Projects or Service Areas page, the footer lists and More Projects.","Mary, Oct 29, Slack","A")
+  ]]
+ ]};
+
+CH.footer = {name:"Footer", grp:"Global", desc:"Simple, clean, all the information. Same footer on every page. Vary only colours and type.", wire:"footer",
+ rules:[
+  ["Footer checklist",[
+   R("Pattern: JM Lara, Vericlean and Rivas footers. Do not experiment with the footer.","Mary, Nov 20, Slack"),
+   R("Form band (quick inquiry) at the top of the global footer: compulsory on every page except Contact.","Aryan, Nov 23 ruling; 17 of 20 live sites (case study)"),
+   R("Same logo file as the header. Phone (tel:), email (mailto:). Hours and license only if confirmed, license in the earlier sites' format.","Layout workflow section 6; Mary, Nov 11 (QC playbook)"),
+   R("Every verified account listed in Podio (social, Yelp, GBP once verified).","Mary, Nov 12 team meeting","A"),
+   R("Link columns: main pages, services, projects (or Projects) and the Service Areas page. City links in the footer are optional (5 of 20 live sites). A map where useful, matching the address or area (13 of 20).","Mary, Nov 20 format call; case study"),
+   R("Bottom bar: Privacy Policy, Terms and Conditions, Cookie preferences, and exactly as Freeman: © 2026 Company Name | Designed & Managed by Apex Operations, with Apex Operations linked to apexops.agency.","Aryan, Nov 23 ruling; 15 of 20 live sites exact (case study); Mary's QC guide check 3"),
+   R("Privacy and Terms pages must exist.","Mary, Nov 20, Slack (Prime Level)"),
+   R("Address only as Podio provides it. No business address in Podio: show the city, region or service areas (Chendo, Good Day, One Time). Never a home address, never an address found on the web.","Aryan, Nov 23 ruling; Mary, Nov 20 team huddle; case study"),
+   R("Email addresses on the site are lowercase; capitals can break form submissions.","Mary, Nov 9, Slack","A"),
+   R("Connect phone, email and address in footers and policy pages to Duda's business info, so one change updates every place.","Mary, Nov 3, Slack","A"),
+   R("Any footer change is made in both the global footer and the Contact page footer copy.","Mary, Nov 3 (QC Guidelines)","A"),
+   R("Same footer on every page, no duplicate footers on phone, columns stack cleanly.","Layout workflow section 6")
+  ]],
+  ["Not allowed",[
+   R("A big company name or text logo across the bottom.","Anthony, Nov 2 huddle; Mary, Nov 18, Slack"),
+   R("About, FAQ or Blog blocks in the contact column.","Mary, Nov 20, Slack (Prime Level)"),
+   R("Placeholder phone numbers or emails; tilted cards or extra marketing sections.","Layout workflow section 6; Anthony, Nov 2 huddle")
+  ]]
+ ]};
+
+CH.forms = {name:"Forms, opt-ins, policies", grp:"Global", desc:"Forms, SMS opt-ins and policy pages follow the paid ads team's master format on every site.",
+ rules:[
+  ["Forms and buttons",[
+   R("The footer form band is compulsory: every page ends with a contact form. The Contact page hides the global footer and closes with a page-level footer copy without a form, because its own form sits higher up.","Aryan, Nov 23 ruling; 16 of 17 live sites (case study)"),
+   R("CTA buttons follow the published sites: header, hero and Final CTA buttons go to the Contact page form anchor (for example /contact#form), landing on the first field under the sticky header.","Aryan, Nov 23 final ruling; all 20 live sites (case study)"),
+   R("Form order: labelled fields, two separate SMS choices, submit button, Privacy and Terms links, then the success message or approved Thank You page.","Gelmarc, DRAFT 11"),
+   R("Two SMS boxes, non-marketing first and marketing second, mapped as two separate fields.","Aryan, Nov 23 ruling; Mary, Nov 3 huddle; 17 of 20 live sites","A"),
+   R("Both boxes are required and never pre-ticked, with the paid ads team's wording (\u201cI consent to receive non-marketing text messages from [Company] ...\u201d).","Aryan, Nov 23 ruling, per Mary, Nov 5, Slack"),
+   R("After submit: Duda's success message for regular clients; a Thank You page only for Google Ads clients.","Mary, Oct 20, Slack"),
+   R("Notifications: Duda's default while building; at launch, the client email Mary gives and every client address she lists. Never a dummy address.","Aryan, Nov 23 ruling; Mary, Nov 3 huddle"),
+   R("At launch and on every QC, check each form's recipients, subject, From name and auto-reply. One form passing does not clear the site.","Mary, Nov 5, Slack","A"),
+   R("Field labels and service options as in the copy. No upload or Submit Plans button unless the form really accepts files.","Gelmarc, DRAFT 08","A"),
+   R("Custom code forms pass answers to a hidden Duda form in the global footer (JM Lara form bridge).","Layout workflow section 5"),
+   R("Form tests are dry runs while building; a live test needs Aryan's OK in that chat.","Aryan's own rule; Mary, Nov 13, Slack")
+  ]],
+  ["Policies",[
+   R("Every site has a Privacy Policy, Terms and Conditions and cookie preferences.","Layout workflow section 9"),
+   R("Opt-ins, Privacy and Terms follow the paid ads team's master format word for word, only verified client details swapped in. Paid ads clients must match it strictly.","Mary, Nov 5 and Nov 21, Slack; Gelmarc's Start Here"),
+   R("Never use S.R. Freeman's custom opt-ins, policies or FAQs as a sample.","Mary, Nov 21, Slack"),
+   R("Never write new legal wording. Missing entries or requested changes go to the paid ads team and Mary.","Aryan's own rule, Nov 1; Gelmarc's Start Here"),
+   R("Policy pages get 10 FAQs after the policy text, never inside it.","Gelmarc, DRAFT 12 and 13")
+  ]],
+  ["Cookies and Termly",[
+   R("The developer owns the cookie banner. Standard: Termly free plan as set up on Good Day (S.R. Freeman has the upgraded plan). A California script on top is not standard yet.","Aryan, Nov 7; Mary, Nov 20 format call"),
+   R("Set up Termly only where a Podio task asks. No general rollout until Anthony approves the Loom walkthrough.","Mary, Nov 18 huddle","A"),
+   R("If the cookie tool blocks an embedded form, map or video, mark that embed as essential.","QC playbook section 6 (S.R. Freeman careers)")
+  ]]
+ ]};
+
+CH.design = {name:"Design rules", grp:"Global", desc:"The look changes per client. These limits do not.",
+ rules:[
+  ["Direction and motion",[
+   R("Structure is fixed; only the design (style, colours, type, motion) varies.","Mary, Nov 20 format call"),
+   R("Calm motion, about 80% less than the early drafts, but not static. Nothing may lag; watch PageSpeed.","Anthony, Nov 11 and 12 huddles"),
+   R("Keep designs simple: no unnecessary or repeated sections.","Mary (Anthony), Nov 11, Slack"),
+   R("Any page added later (training, careers, landing) matches the site's existing layout, fonts, colours, header, FAQ style and footer. Videos embed from uploaded files, never a Google Drive player.","Mary, Oct 21, Slack; Mary, Nov 20 team huddle","A"),
+   R("Keep section spacing even across the page; Anthony checks it.","Mary, Oct 29, Slack","A"),
+   R("Signature sections must be accurate for the trade and must not work against the client (for example implying they are far away).","Anthony, Nov 2 huddle","A")
+  ]],
+  ["Visuals",[
+   R("Homepage hero is always a full-width, full-screen video with only H1, subtitle and one button.","Aryan, Nov 12; Mary, Nov 20 call; Anthony, Nov 16"),
+   R("No empty spaces: every section gets a visual. Vector graphics in sections and backgrounds are welcome.","Aryan, Nov 13"),
+   R("Video behind the contact form section where the design allows.","Aryan, Nov 13"),
+   R("Client logo walls: white silhouettes in equal boxes on a dark band.","Aryan, Nov 6; Mary, Nov 3, Slack"),
+   R("Services cards all the same size.","Anthony, Nov 16"),
+   R("Maps must look good and show counties, not a few city pins.","Anthony, Nov 2 and 16; Mary, Oct 29, Slack"),
+   R("Real client photos may be AI-enhanced, never replaced by AI scenes presented as the client's work.","Anthony, Nov 16"),
+   R("AI media is allowed on first builds until real media arrives, then replaced. It must look completely real, match the brand and never look AI-made. No AI-named files (for example \u201cChatGPT Image ...\u201d).","Aryan, Nov 23 ruling; case study (Casa Mora)"),
+   R("Mobile fully finished: no sideways scrolling, nothing clipped, no big blank gaps.","Layout workflow section 10")
+  ]],
+  ["Banned",[
+   R("Tilted or rotated cards.","Anthony, Nov 2 huddle"),
+   R("Hover zoom on images; marquees or scrolling text bands; “illustrative” labels; brick or tile textures; em dashes.","Layout workflow section 10; Anthony, Nov 16 (textures)"),
+   R("A giant footer wordmark.","Anthony, Nov 2 huddle"),
+   R("Process steps told as times of day; ticket or barcode cards.","Anthony, Nov 2 huddle","A"),
+   R("Compass, ECG or grid lines over the hero.","Aryan, Nov 13","A"),
+   R("Serif fonts, unless the client's brand guide sets one: the brand guide wins (5 of 20 live sites use serif headings).","Aryan, Nov 23 ruling; case study")
+  ]],
+  ["Photos",[
+   R("Photos come from the client's project folders; use the best real ones. Photo choice is the developer's call.","Mary, Oct 26 and 30, Slack"),
+   R("Each project page uses that project's own photos from hero to CTA, gallery included.","Mary (Anthony), Oct 26 and 30, Slack","A"),
+   R("City pages use photos from their own city where possible, different from other pages.","Mary, Oct 29, Slack; Aryan, Oct 31","A"),
+   R("Real photos first. Truehaven (client-specific): approved real photos or real stock only, no AI images or staged worker photos.","Mary, Nov 20, Podio")
+  ]]
+ ]};
+
+CH.facts = {name:"Privacy and facts", grp:"Global", desc:"Nothing unconfirmed goes on a site.",
+ rules:[
+  ["Rules",[
+   R("No unconfirmed client information anywhere. If it is not in the Podio files or confirmed by Mary, leave it out until confirmed (Chendo's license was removed).","Nov 20 team huddle; Mary, Nov 20, Podio"),
+   R("No invented stats, reviews, clients, services, credentials or claims (Prime Level's “Owner on site” was removed).","Anthony, Nov 2 huddle; layout workflow section 8"),
+   R("Residential projects show the city only, never the street address.","Nov 20 team huddle"),
+   R("No client home address unless the client asks. No business address means a service-area-only site.","Nov 20 team huddle"),
+   R("GBP link only for a verified profile. Unknown social accounts: confirm with Gelmarc.","Nov 20 team huddle"),
+   R("A service the client is not licensed for: hide its sections and links, move the page to draft, keep it out of the index.","Mary, Nov 11 (Casa Mora, QC playbook)"),
+   R("Cities outside the service range come off every coverage list.","Mary, Nov 11 (One Time, QC playbook)"),
+   R("Reviews: verified only, or placeholders the client agreed to. Placeholders stay until real ones arrive.","Mary, Nov 20 format call; Mary, Nov 8 (Chendo)"),
+   R("On rebrands, keep genuine testimonials word for word.","Mary, Oct 27, Slack")
+  ]]
+ ]};
+
+CH.duda = {name:"Duda build", grp:"Build and check", desc:"Port the approved design into Duda. Save, never publish, until the site is approved.",
+ rules:[
+  ["Build method",[
+   R("Port the approved design's real source (JM Lara method): one HTML element per section, header and footer in Duda's global header and footer, CSS in Developer Mode site.css, scripts as plain files, media in the File Library.","Aryan, Nov 13; layout workflow section 11"),
+   R("Custom code on Duda is expected; do not rebuild in native widgets.","Mary, Nov 20, Slack"),
+   R("Build without Duda AI credits.","Anthony, Oct 20, Slack","A"),
+   R("One person in a Duda editor at a time: say in #private-ai-web-dev-team when you enter or leave.","Mary, Oct 28, Slack","A"),
+   R("Save a Site Backup in the editor before changing a site and before publishing; never duplicate backup sites.","Mary, Nov 16 and 18, Slack"),
+   R("Host hero and background videos as plain compressed files in the File Library, not Duda's video library.","Aryan, Nov 12"),
+   R("Keep “$” out of Duda Head HTML (costs about 5 mobile PageSpeed points).","Aryan, Nov 11")
+  ]],
+  ["After the build",[
+   R("Label every site moved to Duda in the dashboard.","Mary, Nov 13 and Nov 20, Slack"),
+   R("Once on Duda: add the editor link and notes to the Podio task, then assign Gelmarc the content and SEO task (update an existing task, never a second one). Never before the site is on Duda.","Mary and Gelmarc, Nov 19, Slack"),
+   R("Publishing: save, never publish, until approved. AI chats publish only after Aryan types \u201cpublish <site>\u201d. Aryan himself may publish when confident and tell Mary after.","Aryan, Nov 23 ruling; Mary, Nov 19, Slack")
+  ]]
+ ]};
+
+CH.qc = {name:"QC checks", grp:"Build and check", desc:"Every website gets pre-launch and post-launch QC against Mary's 25-point guide.",
+ rules:[
+  ["Who and when",[
+   R("Pre-launch: Gelmarc does the content and SEO audit, the developer (Aryan on John's sites) does the layout QC.","Nov 20 team huddle"),
+   R("Developer QC starts once the site is on Duda and Gelmarc has finished his review.","John, confirmed by Mary, Nov 19, Slack"),
+   R("Post-launch QC on desktop, tablet and phone; send content and SEO issues to Gelmarc; then assign Mary a separate final-review task.","Mary, Nov 20, Slack"),
+   R("Revision tasks: QC only the actual updates.","Mary, Nov 5, Slack")
+  ]],
+  ["What to check",[
+   R("Alt text, URL redirects for clients with an old site, the favicon and other icons (tab, home screen, social image), and PageSpeed on Home and one inner page.","Mary, Nov 21, Slack (Nov 22 India date)"),
+   R("Saved preview on desktop, tablet and phone.","Gelmarc's Start Here; Mary, Nov 20, Podio","A"),
+   R("Accessibility: run accessibilitychecker.org on the homepage (aim for 90 or more).","Anthony, Nov 9 huddle","A"),
+   R("FAQ accordions open and close on desktop and phone.","Gelmarc, DRAFT 15","A"),
+   R("Photos are part of developer QC; do not wait for reminders.","Mary, Oct 29, Slack"),
+   R("When a URL changes: 301 from the old URL, update every internal link, test the old link after publishing.","Mary, Nov 8 (QC rule R9)"),
+   R("Footer content checklist goes into the website QC skill.","Mary, Nov 20, Slack"),
+   R("Verify every AI finding by hand; Not Verified is never Pass.","Mary, Oct 21, Slack; QC playbook section 2")
+  ]]
+ ]};
+
+CH.showing = {name:"Before showing", grp:"Build and check", desc:"Run this before every presentation and before any link goes to a channel Anthony reads.",
+ html:function(){
+  var items=[
+   "Page count and names match the Podio Website Pages document (policy pages excluded).",
+   "Menu: Home, About (FAQ and Blog inside), Services, Projects, Service Areas, Contact (Financing if any); dropdowns with exact page names; one header button.",
+   "Hero: video, title, subtitle, one button.",
+   "Homepage order matches the Home page type, with no extra or repeated sections.",
+   "Footer form band on every page; global footer hidden on Contact.",
+   "Every CTA goes to the Contact page form and lands on the first field.",
+   "Two required SMS boxes (non-marketing first), never pre-ticked; Privacy and Terms under submit.",
+   "Footer: every checklist item, address only from Podio, credit line exact and linked, Privacy and Terms pages exist.",
+   "FAQ counts exactly as Gelmarc's instructions: 10 on every non-project page, 20 on the FAQ page, none on Projects or project pages.",
+   "Every page follows its page-type order; Service Areas uses its own layout.",
+   "Headings: one H1 per page, no skipped levels.",
+   "Privacy and Terms match the paid ads team's master format.",
+   "No unconfirmed info, no street addresses, no dummy phone or email, no AI-named files.",
+   "Desktop 1440px, tablet 768px and phone 390px: no console errors, no sideways scrolling, menus and forms work.",
+   "Dropdowns open by keyboard; accessibility check run; FAQ accordions work."
+  ];
+  return '<div class="chapter"><section><ol class="steps">'+items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol></section>'+
+   rulesSection("How to use it",[
+    R("Fix what Anthony would notice first: footer, forms, menu, missing sections.","Layout workflow section 12"),
+    R("Raise problems in #private-ai-web-dev-team before Anthony sees them. Only finished work goes to #ai-web-dev.","Mary, Nov 18 and Nov 12, Slack"),
+    R("Everyone checks footers and contact forms before showing builds.","Nov 20 format call, action item")
+   ])+'</div>';
+ }};
+
+CH.pending = {name:"Pending decisions", grp:"Open items", desc:"Aryan ruled all 11 audit conflicts on Nov 23. What is still genuinely open is below.",
+ html:function(){
+  var RUL=[
+   ["SMS boxes","Two boxes, non-marketing first, required, never pre-ticked, paid ads wording.","Aryan, Nov 23, per Mary, Nov 5"],
+   ["Page order","Gelmarc's per-page order; footer form band compulsory on every page except Contact.","Aryan, Nov 23"],
+   ["Address","Only what Podio provides; never assumed from the web; service areas when there is none.","Aryan, Nov 23"],
+   ["Publishing","AI chats only after Aryan types \u201cpublish <site>\u201d; Aryan may publish when confident and tell Mary after.","Aryan, Nov 23"],
+   ["Contact page","Gelmarc's Contact template; hours, license and address only when Podio provides them.","Aryan, Nov 23"],
+   ["FAQ counts","Exactly as Gelmarc's instructions, including \u201cflag if 10 would need filler\u201d.","Aryan, Nov 23"],
+   ["Fonts","The brand guide wins over the serif ban.","Aryan, Nov 23"],
+   ["AI media","Allowed on first builds if it looks completely real and on brand; replaced when real media arrives; no AI-named files.","Aryan, Nov 23"],
+   ["Projects on the homepage","Slider or cards, one per project page, View Project.","Aryan, Nov 23"],
+   ["CTA buttons","To the Contact page form, as on all 20 live sites. Header has one button (call or contact).","Aryan, Nov 23"],
+   ["Menu","Home, About (FAQ and Blog inside), Services, Projects, Service Areas, Contact, Financing if any.","Aryan, Nov 23"],
+   ["More Projects","Not required now; future rule only if Gelmarc's instructions call for it.","Aryan, Nov 23"],
+   ["Freeman and credit","Good but large sample; pages only from Podio; credit line exactly as Freeman; Duda default notifications while building.","Aryan, Nov 23"]
+  ];
+  var ANT=[
+   ["4-day clock","Does the 4-day clock after concept approval still apply? (To decide later.)"]
+  ];
+  var FOL=[
+   ["Gelmarc's Form Notices template still says the SMS boxes are optional, and his DRAFT 06 still lists More Projects.","Aryan will raise it with Gelmarc on Slack after this task. Until then this guide follows Aryan's rulings."],
+   ["Launched sites that differ from the new rules (credit line variants on 5 sites; no FAQs on Privacy, Terms and Blog index).","Not QC failures. Any fix on a live site needs approval first."]
+  ];
+  var h='<div class="chapter"><h3 style="margin:0 0 8px">Still open: for Anthony (1)</h3>';
+  ANT.forEach(function(x){ h+='<div class="pendcard"><h3>'+x[0]+' <span class="tag p">Pending Anthony</span></h3><p>'+x[1]+'</p></div>'; });
+  h+='<h3 style="margin:18px 0 8px">Follow-ups (not decisions)</h3>';
+  FOL.forEach(function(x){ h+='<section><p style="margin:0 0 4px"><b>'+x[0]+'</b></p><p class="small" style="margin:0">'+x[1]+'</p></section>'; });
+  h+='<h3 style="margin:18px 0 8px">Ruled by Aryan, Nov 23 (no longer pending)</h3><section><table class="own-t"><tr><th>Topic</th><th>Ruling</th><th>Source</th></tr>'+RUL.map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="small">'+x[2]+'</td></tr>';}).join('')+'</table></section>';
+  return h+'<p class="small">The homepage order question for Anthony was dropped: Aryan ruled Gelmarc\u2019s order as the standard.</p></div>';
+ }};
+
+CH.current = {name:"How this guide stays current", grp:"Open items", desc:"The guide only works if every new rule lands here the same day, with its source.",
+ html:function(){
+  var steps=[
+   "A new rule appears in a huddle, Slack or a Podio comment.",
+   "The daily sweep adds it to HQ/Rules.md first, with who, LA date and a link to the source.",
+   "In the same change, add it to this guide (right chapter or page type) and to workflows/developer-layout-workflow.md, with the same citation.",
+   "If it replaces an older rule, mark the old one Replaced here and in HQ/Rules.md (with the date and who replaced it). Never delete a rule silently.",
+   "If two rules pull against each other, add both sides to Pending decisions with a recommendation and the Pending Aryan tag. Do not pick one quietly.",
+   "Update Last updated and Sources checked at the top, and add a line to the version log below.",
+   "Gelmarc's content layer changes only when his Google Doc changes: re-read it and update the Content column."
+  ];
+  var LOG=[
+   ["Nov 24, 2026","v3.3: staging preview on Hostinger, Cloudflare Pages, Vercel or GitHub Pages, whichever fits; code always in an Apex GitHub repo.","Aryan, Nov 24"],
+   ["Nov 24, 2026","v3.2: content route decided (developer drafts with Gelmarc's workflow, Gelmarc audits); only the 4-day clock stays open.","Aryan, Nov 23; Anthony, Nov 11"],
+   ["Nov 24, 2026","v3.1: branding check added to Before building (Mary's Nov 18 routing rule, quoted).","Aryan, via the QC controller"],
+   ["Nov 23, 2026","v3: Aryan's final rulings applied (SMS required, Gelmarc's order with a compulsory footer form band, address only from Podio, publishing, Contact template, FAQ as Gelmarc, brand guide fonts, AI media, projects slider or cards, CTAs to the Contact page form, menu with FAQ and Blog under About, More Projects as a future rule, Freeman credit). Case study of 20 live sites added as the de facto standard. Pending decisions cut to 3 for Anthony.","Aryan, Nov 23, via the QC controller"],
+   ["Nov 23, 2026","v2: one complete standard. Layout wireframes, Gelmarc's content templates and team standards per page type; global chapters; 30 audit additions (tagged); 11 pending conflicts plus 4 decisions for Anthony.","Aryan's request, via the QC controller"],
+   ["Nov 23, 2026","v1: layout preview guide (wireframes and rule callouts only), workflows/developer-layout-preview-guide.html.","Aryan's request"],
+   ["Nov 23, 2026","Layout workflow updated with Aryan's rulings: Freeman is a large sample (pages come from the Website Pages doc), every CTA anchors to the form, Gelmarc's homepage order replaces Core Values, credit line as on Freeman's live footer, Duda default notifications.","Aryan, Nov 23"],
+   ["Nov 23, 2026","Layout workflow lined up with Gelmarc's page templates (“gelmarc we pick”).","Aryan, Nov 23"],
+   ["Nov 21, 2026","First layout workflow draft, from Mary's Nov 20 format call.","Mary, Nov 20"]
+  ];
+  var REPL=[
+   R("Same-page CTA anchor replaced by: every CTA goes to the Contact page form, as on all live sites.","Mary, Nov 20 call, and Aryan, Nov 23 morning; replaced by Aryan, Nov 23 final ruling","R"),
+   R("FAQ and Blog as top-level menu items replaced by: inside the About dropdown.","Replaced by Aryan, Nov 23","R"),
+   R("Serif fonts banned replaced by: the brand guide wins.","Layout workflow section 10; replaced by Aryan, Nov 23","R"),
+   R("No AI images replaced by: AI media allowed on first builds if it looks completely real; replaced when real media arrives.","Layout workflow section 8; replaced by Aryan, Nov 23","R"),
+   R("More Projects required on project pages replaced by: future rule, only if Gelmarc's instructions call for it.","Mary, Nov 21; replaced by Aryan, Nov 23","R"),
+   R("Homepage Core Values row (Anthony's Nov 11 format) replaced by Gelmarc's order: Why choose us is the only strengths row.","Anthony, Nov 11; replaced by Aryan, Nov 23","R"),
+   R("CTAs to the Contact page form (Mary (Anthony), Nov 3) were briefly replaced by the same-page rule; they are the rule again.","Aryan, Nov 23 final ruling","R"),
+   R("S.R. Freeman “not a good sample” replaced by: good structure sample, but pages come only from the project's Website Pages doc.","Mary, Nov 20; replaced by Aryan, Nov 23","R"),
+   R("Prototype straight in Duda replaced by a GitHub repo and a staging preview first.","Anthony, Oct 15; replaced by Mary (Anthony), Nov 12","R")
+  ];
+  var h='<div class="chapter"><section><h3>Update process</h3><ol class="steps">'+steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol></section>';
+  h+='<section><h3>Version log</h3><table class="own-t"><tr><th>Date (LA)</th><th>Change</th><th>Asked by</th></tr>'+LOG.map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="small">'+x[2]+'</td></tr>';}).join('')+'</table></section>';
+  return h+rulesSection("Replaced rules (kept for history)",REPL)+'</div>';
+ }};
+
+/* ---------------- page types ---------------- */
+var CLIENT='Example Builders', SVC=['Service One','Service Two','Service Three'], PRJ=['Project One','Project Two','Project Three'], CITY=['City A','City B','City C','City D','City E'];
+function b(kind,label,note,o){ return {kind:kind,label:label,note:note||'',o:o||{}}; }
+function mix(a,c){ var r={},k; for(k in a) r[k]=a[k]; for(k in c) r[k]=c[k]; return r; }
+var HEADER=b('header','Global header','Same header on every page');
+function FORMBAND(){ return b('form','Footer form band','Compulsory on every page except Contact',{sms:true}); }
+var FOOTER=b('footer','Global footer','Same footer on every page');
+function FAQ(n,note,o){ return b('faq','FAQ ('+n+')',note||('FAQ: '+n),mix({n:n},o||{})); }
+function CTA(o){ return b('cta','Final CTA','Button goes to the Contact page form',o); }
+var NOFAQ=b('none','No FAQ on this page','');
+
+var PT = [
+ {id:'home',name:'Home',desc:'Show what the business does, who it helps and why visitors should contact it.',
+  wire:[HEADER,
+   b('hero','Video hero','H1 = hero title. One button to the Contact page form',{h1:'Building Done Right in City A'}),
+   b('split','About us','Always; links to the About page',{btn:'About Us'}),
+   b('cards','Why choose us','Verified proof only; the only strengths row',{n:3,small:true,noimg:true}),
+   b('logos','Professional affiliations','Only if verified'),
+   b('cards','Services','Equal cards, one per service page',{n:3,names:SVC,btn:'Learn More'}),
+   b('steps','How we work','One process section only',{n:4}),
+   b('areas','Service areas','Counties; links to area pages'),
+   b('cards','Featured projects','Slider or cards, one per project page, View Project',{n:3,names:PRJ,btn:'View Project',slider:true}),
+   b('reviews','Reviews','Verified, or agreed placeholders'),
+   FAQ(10,'FAQ: 10 (flag if 10 would need filler)'),CTA(),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: clear positioning, short supporting copy and the main CTA."],["H2","Business introduction: explain the company and link to About."],["H2","Why choose us: verified strengths or proof."],["H2","Professional Affiliations: verified memberships, accreditations or credentials with approved logos and links; omit if none."],["H2","Services: an H3 summary and link for each main service."],["H2","How we work: the actual process."],["H2","Service areas: real coverage, linking to location pages."],["H2","Featured projects: approved work linking to each Project page."],["H2","Reviews: verified feedback, when available."],["H2","FAQs: 10 useful buying questions."],["H2","Final CTA: to the approved inquiry form."]],
+   copy:"Keep the hero short. Give each section a different purpose. One main inquiry action, with View Service and View Project links where relevant.",
+   faq:"10", meta:"URL: the site root. Title: [Main service or positioning] | [Brand]. Description: the real service, audience or market, and a reason to inquire.",
+   check:"Every featured service, project and location link reaches the matching page."},
+  std:[
+   R("Hero: full-width, full-screen muted looping video with a poster image; only H1, subtitle and one button; no badges, stats or captions.","Aryan, Nov 12; Mary, Nov 20 call; Anthony, Nov 16"),
+   R("About us always appears (Rivas was flagged for missing it).","Mary, Nov 20 team huddle"),
+   R("Gelmarc's order replaces the separate Core Values row; Why choose us is the only strengths row.","Aryan, Nov 23 ruling"),
+   R("Homepages include a professional affiliations section built from verified credentials.","Mary, Nov 21, Slack"),
+   R("No project photo gallery on the homepage; no hours or licensing block mid-page.","Mary, Nov 20 team huddle (Rivas)"),
+   R("Service areas copy the launched samples and show counties, not a few city pins.","Mary, Oct 29, Slack; Anthony, Nov 2 huddle"),
+   R("Projects: 3 project pages is the standard unless the page list says otherwise; missing ones get realistic placeholders, never “coming soon”.","Mary, Nov 20 format call"),
+   R("Featured projects: slider or cards, one per project page, each with View Project. Freeman uses region tabs each with a slider.","Aryan, Nov 23 ruling; case study"),
+   R("Hero and Final CTA buttons go to the Contact page form.","Aryan, Nov 23 ruling; all 20 live sites"),
+   R("FAQ: 10, exactly as Gelmarc's instructions; flag if 10 would need filler.","Aryan, Nov 23 ruling; Gelmarc's Start Here"),
+   R("Include a section only when the client has the real material for it.","Layout workflow section 3")
+  ]},
+ {id:'about',name:'About',desc:'Explain the real company, its people and how it works.',
+  wire:[HEADER,b('hero','Page hero','H1 = page title',{inner:true,h1:'About '+CLIENT}),b('split','Company story','Real history only'),b('text','Our approach',''),b('cards','People and leadership','Real names and photos only',{n:3,small:true,people:true}),b('cards','Values','',{n:4,small:true,noimg:true}),b('chips','Expertise','Links to each service',{items:SVC,link:true}),CTA(),FAQ(10,'FAQ: 10 (after the Final CTA, Gelmarc\u2019s order)'),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: company positioning and a short introduction."],["H2","Company story: verified history or the problem the company solves."],["H2","Our approach: how the company works."],["H2","People and leadership: real names, roles and approved photos."],["H2","Values: the actions behind each principle."],["H2","Expertise: introduce services and link to them."],["H2","Final CTA: invite the right inquiry."],["H2","FAQs: 10 company-specific questions."]],
+   copy:"Use the client's own story. Verify dates, credentials and experience claims. Link to Team, Services and Contact where they exist.",
+   faq:"10", meta:"Title: About [Brand] | [Specialization]. Description: the verified company identity and approach.",
+   check:"The biography, team photo and role belong to the correct person."},
+  std:[R("Team sections use a full crew photo when one fits; no invented people.","Aryan, Oct 31; layout workflow section 8"),R("About keeps Gelmarc's order: Final CTA, then FAQ.","Aryan, Nov 23 ruling; Gelmarc, DRAFT 02")]},
+ {id:'services',name:'Services overview',desc:'Help visitors choose the right service.',
+  wire:[HEADER,b('hero','Page hero','H1 = page title',{inner:true,h1:'Our Services'}),b('text','What we provide',''),b('cards','Service cards','H3 name, summary, link',{n:3,names:SVC,btn:'Learn More'}),b('steps','How we work','',{n:4}),b('split','Project fit',''),FAQ(10),CTA(),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: service-family heading, short introduction and main CTA."],["H2","What we provide: the work and customers served."],["H2","Services: each service an H3 name, short scope summary and detail-page link."],["H2","How we work: the shared process."],["H2","Project fit: projects or industries served."],["H2","FAQs: 10 broad service-selection questions."],["H2","Final CTA: invite an inquiry."]],
+   copy:"Keep summaries short and distinct. Each service links to its own page. Do not repeat the full Service page copy.",
+   faq:"10", meta:"Title: [Service family] Services | [Brand]. Description: the actual service range, audience and coverage.",
+   check:"Every service name, image and button reaches the correct destination."},
+  std:[R("Equal-size cards, one per service page; only the client's real services.","Anthony, Nov 2 huddle and Nov 16"),R("Service names start from onboarding; Gelmarc may rename them for SEO, but the number of services never changes.","Mary, Nov 20, Slack (Pruneyard)"),R("A service the client is not licensed for is hidden and its page moved to draft.","Mary, Nov 11 (Casa Mora)")]},
+ {id:'service',name:'Service page',desc:'One page per service in the Podio page list. Explain one service and help the right customer inquire.',
+  wire:[HEADER,b('hero','Page hero','H1 = service name',{inner:true,h1:'Service One'}),b('split','Service overview',''),b('cards','Scope','H3 items',{n:4,small:true,noimg:true}),b('steps','Process','',{n:4}),b('cards','Why this company','Verified proof only',{n:3,small:true,noimg:true}),b('chips','Coverage','Links to area pages',{items:CITY,link:true}),b('cards','Project proof','Real projects',{n:2,names:['Project One','Project Two'],btn:'View Project'}),FAQ(10),CTA(),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: the service, a short explanation and the main CTA."],["H2","Service overview: the need and what the service covers."],["H2","Scope: H3 items for actual options or capabilities."],["H2","Process: preparation, delivery and responsibilities."],["H2","Why this company: relevant, verified strengths."],["H2","Coverage: real service areas, linked where helpful."],["H2","Project proof: relevant work or reviews."],["H2","FAQs: 10 service-specific questions."],["H2","Final CTA: the approved inquiry route."]],
+   copy:"State inclusions and exclusions clearly. Link to Services, related services, relevant locations and real project proof.",
+   faq:"10", meta:"Title: [Service] in [Verified market] | [Brand]. Description: the specific scope and a useful next step.",
+   check:"Keep the page on one service. Do not duplicate the Services overview or a City page."},
+  std:[R("Every service in the page list gets its page and its dropdown entry.","Aryan, Nov 13; Mary, Nov 20 call"),R("FAQ: 10 (16 of 18 live sites).","Gelmarc's Start Here; case study")]},
+ {id:'projects',name:'Projects',desc:'Make real project work easy to browse.',
+  wire:[HEADER,b('hero','Page hero','H1 = page title',{inner:true,h1:'Our Projects'}),b('text','Short intro',''),b('cards','Project cards','H3, real photo, summary, View Project',{n:3,names:PRJ,btn:'View Project'}),b('chips','Related services','',{items:SVC,link:true}),CTA(),NOFAQ,FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: the type of work shown."],["H2","Short introduction: useful context."],["H2","Project gallery: H3 project names, real images, short scope summaries and View Project links."],["H2","Related services: link the work to services."],["H2","Final CTA: invite a similar project inquiry."]],
+   copy:"Large portfolios: group under H2 region or type headings. Keep project names consistent. Describe the client's actual role. Do not invent projects from a mixed photo folder.",
+   faq:"0", meta:"Title: [Work type] Projects | [Brand]. Description: the actual portfolio, services and locations.",
+   check:"Every card's name, scope, image and link is right. Placeholders stay tracked in draft."},
+  std:[R("Standard is 3 project pages unless the page list says otherwise; realistic placeholders, never “coming soon”; check the placeholder format with Gelmarc.","Mary, Nov 20 format call; Nov 21, Slack"),R("Projects header dropdown lists every project page.","Mary, Nov 20 team huddle (Rivas)")]},
+ {id:'project',name:'Project page',desc:'One page per project. Show what the client actually did on one project.',
+  wire:[HEADER,b('hero','Page hero','H1 = project name; city only',{inner:true,h1:'Project One, City A'}),b('split','Project overview','City only, no street address'),b('cards','Scope of work','H3 items',{n:3,small:true,noimg:true}),b('split','Challenge and approach',''),b('stats','Delivery or results','Confirmed outcomes only'),b('gallery','Gallery','This project’s photos only'),b('future','More Projects','Future rule, only if Gelmarc’s instructions call for it'),CTA(),NOFAQ,FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: approved project name or headline, plus a short introduction."],["H2","Project Overview: verified location, type and scope."],["H2","Scope of Work: H3 items for work performed."],["H2","Challenge and Approach: a documented condition and how it was handled."],["H2","Delivery or Results: the confirmed outcome."],["H2","Gallery: correct photos, captions and alt text."],["H2","More Projects: other approved projects with links to Projects and relevant pages. (Not required now per Aryan, Nov 23; future rule.)"],["H2","Final CTA: invite a similar project inquiry."]],
+   copy:"Use verified notes and approved media. Credit the client's actual role. Do not invent savings, schedules, specifications or results.",
+   faq:"0", meta:"Title: [Project name or scope/location] | [Brand]. Description: actual work and one documented detail.",
+   check:"Every specification, photo and credit matches this project. No private address without approval."},
+  std:[R("Every image, hero and gallery included, comes from that project's own photos.","Mary (Anthony), Oct 26 and 30, Slack","A"),R("More Projects is not required now. It becomes a rule only if Gelmarc's instructions call for it (his DRAFT 06 lists it; to be settled with him).","Aryan, Nov 23 ruling","F"),R("Project pages on live sites: overview, scope, challenge, results, reviews, CTA; More Projects on 6 of 17.","Case study"),R("Residential projects show the city only.","Nov 20 team huddle"),R("Project descriptions describe only what the photos show.","Mary, Oct 5, Slack")]},
+ {id:'areas',name:'Service Areas',desc:'The parent coverage page. Its own layout, separate from the city pages.',
+  wire:[HEADER,b('hero','Page hero','H1 = page title',{inner:true,h1:'Service Areas'}),b('mapblk','Coverage overview','Real coverage and limits'),b('regions','Regions','H3 county or city groups; every city links'),b('chips','Services available','',{items:SVC,link:true}),b('cards','Regional proof','',{n:3,small:true}),FAQ(10),CTA(),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: the overall region and a short coverage introduction."],["H2","Coverage Overview: the real service area and any limits."],["H2","Regions or States: locations organized logically."],["H3","County or City Groups: city lists and links (H4 counties only under an H3 state)."],["H2","Services Available: link to core Service pages."],["H2","Regional Proof: real projects or verified experience."],["H2","FAQs: 10 about coverage and availability."],["H2","Final CTA: invite visitors to confirm their location."]],
+   copy:"Verified coverage only. Every city links to its page. Do not imply an office in each location or repeat city-page copy.",
+   faq:"10 (overall coverage)", meta:"Title: Service Areas | [Brand]. Description: coverage, services and a next step.",
+   check:"Parent and child structure, names, coverage and every city destination."},
+  std:[R("The main Service Areas page has its own layout, separate from the city pages (15 of 16 live sites). Freeman adds a Regions layer for multi-region clients.","Mary, Nov 21, Slack; case study"),R("Maps show counties and must look good.","Mary, Oct 29; Anthony, Nov 16"),R("Cities outside the service range come off every list.","Mary, Nov 11 (One Time)")]},
+ {id:'city',name:'City page',desc:'One page per service area in the Podio page list.',
+  wire:[HEADER,b('hero','Page hero','H1 = service or positioning + city',{inner:true,h1:'Builders in City A'}),b('text','Local introduction',''),b('chips','Services available','H3 summaries + links',{items:SVC,link:true}),b('steps','Approach','',{n:3}),b('cards','Local proof or coverage','Real local work',{n:2,small:true}),FAQ(10,'Local FAQ: 10 (flag if 10 would need filler)'),CTA(),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Hero: service or positioning plus the city."],["H2","Local introduction: the relevant customer needs."],["H2","Services available: H3 summaries and links."],["H2","Approach: preparation, delivery or coordination."],["H2","Local proof or coverage: real projects, office facts or service relationship."],["H2","Local FAQs: 10 distinct local questions."],["H2","Final CTA: invite a local inquiry."]],
+   copy:"Each City page gives distinct, useful information. Never swap city names in near-identical copy. Coverage does not mean an office there. Link the parent area, services, local projects and Contact.",
+   faq:"10 local", meta:"Title: [Service] in [City] | [Brand]. Description: the actual local service; unique per city.",
+   check:"Coverage, local facts and every city destination."},
+  std:[R("City pages use their own city's photos where possible, different from other pages.","Mary, Oct 29, Slack; Aryan, Oct 31","A"),R("Typical packages have 5 service areas; some have 20. The page list decides.","Layout workflow section 0")]},
+ {id:'faq',name:'FAQ page',desc:'Answer the main questions on one dedicated page.',
+  wire:[HEADER,b('hero','Page hero','H1 = Frequently Asked Questions',{inner:true,h1:'Frequently Asked Questions'}),b('faqgroups','Question groups','20, grouped by topic'),CTA(),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Frequently Asked Questions: short introduction."],["H2","Question Groups: Services, Process, Coverage, Getting Started."],["H3","Questions: 20 clear questions with verified answers."],["H2","Final CTA: invite the next inquiry."]],
+   copy:"Use actual services and approved facts. Concise, distinct answers. Link Services, City pages, Projects and Contact where useful.",
+   faq:"20", meta:"Title: Frequently Asked Questions | [Brand]. Description: the main topics and audience.",
+   check:"20 unique answers, heading levels, links and accordion behavior. Google retired FAQ rich results in May 2026: never promise them."},
+  std:[R("FAQ accordions open and close on desktop and phone.","Gelmarc, DRAFT 15","A")]},
+ {id:'blog',name:'Blog index',desc:'Only if the Podio page list includes a blog. Help visitors find articles.',
+  wire:[HEADER,b('hero','Page title','H1 = approved resource name',{inner:true,h1:'Blog'}),b('cards','Article listing','Image, title, excerpt, link',{n:3,names:['Article One','Article Two','Article Three'],btn:'Read More'}),b('filters','Filters, pagination','Only when needed'),FAQ(10,'FAQ: 10; no Final CTA (Gelmarc\u2019s template)'),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Approved resource name: Blog, Insights or the client's label."],["H2","Article listing: images, titles, excerpts and links (H3 card titles)."],["–","Search or topic filters: only when useful."],["–","Pagination: when the count needs it."],["H2","FAQs: 10 about the resources and services covered."],["–","Shared footer."]],
+   copy:"Titles and excerpts accurate and distinct. Image, title and Read More reach the same article.",
+   faq:"10", meta:"Title: [Blog or resource name] | [Brand]. Description: the real topics and audience.",
+   check:"Card and image associations, filters and pagination. No unpublished articles listed."},
+  std:[R("Each card's image, title and Read More open the same article; unpublished posts are never listed.","Gelmarc, DRAFT 10","A"),R("10 FAQs on the Blog index is a new rule (0 on 15 of 18 live sites): apply to new builds.","Aryan, Nov 23 ruling; case study")]},
+ {id:'post',name:'Blog post',desc:'Answer one useful customer question and connect it to the client’s expertise.',
+  wire:[HEADER,b('hero','Article title','H1 = article title',{inner:true,h1:'Article One'}),b('text','Introduction','Answer early'),b('article','Main sections','H2 sections, H3 points'),FAQ(10),b('cta','Next step','CTA to the Contact page form + a service link',{svcLink:true}),b('cards','Related articles','',{n:3,names:['Article Two','Article Three','Article Four'],btn:'Read More'}),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Article title: the topic or question."],["–","Introduction: the useful answer early."],["H2","Main sections in a logical order."],["H3","Supporting points under an H2."],["H2","FAQs: 10 distinct questions."],["H2","Next Step: a CTA and a relevant service link."],["–","Related articles: link the Blog index and useful posts."]],
+   copy:"Transcript articles use the complete transcript. Researched articles use reliable sources, original copy. Never invent statistics, proof, authors or dates.",
+   faq:"10", meta:"Title: [Specific topic or question] | [Brand if it fits]. Description: the practical answer. Concise slug, relevant image, accurate alt text.",
+   check:"Informational and distinct from Service and City pages. Sources, links, byline and dates verified."},
+  std:[R("Blog post edits need “Republish Post” and Aryan's publish OK.","QC playbook section 6 (One Time)")]},
+ {id:'contact',name:'Contact',desc:'Help visitors reach the business or send a useful inquiry. The only page without the footer form.',
+  wire:[HEADER,b('hero','Page hero','H1 = clear inquiry invitation',{inner:true,h1:'Contact '+CLIENT}),b('contactinfo','Contact information','Address, hours, license only if Podio provides them'),b('text','What to send',''),b('form','Inquiry form','Two required SMS boxes, non-marketing first',{sms:true,light:true,detailed:true}),b('steps','What happens next','',{n:3}),b('chips','Service areas','',{items:CITY,link:true}),FAQ(10,'FAQ: 10; page content ends here'),b('none','Global footer hidden: no form band here',''),b('footer','Page-level footer copy','Same links and credit, no form')],
+  gel:{order:[["H1","Hero: a clear inquiry invitation."],["H2","Contact Information: verified phone, email and office details."],["H2","What to Send: details that help the team respond."],["H2","Inquiry Form: clear labels, required fields, helper text."],["–","Standard opt-ins: paid ads team format, actual Privacy and Terms links."],["H2","What Happens Next: the actual review process."],["H2","Service Areas: coverage and links."],["H2","FAQs: 10 inquiry questions."]],
+   copy:"Approved CTA and exact form anchor. Usable phone and email links. Never promise response times, free estimates or uploads unless confirmed. A Submit Plans button must lead to a real way to submit plans.",
+   faq:"10", meta:"Title: Contact [Brand] | [Inquiry purpose]. Description: the contact purpose and next step.",
+   check:"Fields, recipient settings, success destination and consent behavior. Confirm receipt separately."},
+  std:[R("Contact has its own form higher up, so no footer form band here.","Mary, Nov 20 format call; Aryan, Nov 23 ruling"),R("Hours and licensing belong on Contact or in the footer, not mid-homepage.","Mary, Nov 20 team huddle"),R("Gelmarc's Contact template order. Address, hours and license only when Podio provides them, inside Contact information. Map optional.","Aryan, Nov 23 ruling"),R("Global footer hidden on Contact; a page-level footer copy without a form closes the page.","16 of 17 live sites (case study)"),R("The Contact footer copy stays in sync with the global footer.","Mary, Nov 3 (QC Guidelines)","A")]},
+ {id:'privacy',name:'Privacy Policy',desc:'Always exists. Does not count toward the page total.',
+  wire:[HEADER,b('hero','Page title','H1 = Privacy Policy + business name',{inner:true,h1:'Privacy Policy'}),b('policy','Policy text','Master format, word for word'),FAQ(10,'FAQ: 10 after the policy (new rule)'),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Privacy Policy: business name and approved effective date."],["–","Introduction: the client's master-file wording."],["H2","Personal Information We Collect."],["H2","How We Use Collected Data."],["H2","SMS Consent: How It Is Obtained and Used."],["H2","Cookies and Tracking Technologies."],["H2","How We Protect Your Data."],["H2","Accessing or Deleting Your Data."],["H2","Phone Number Sharing or Selling."],["H2","Contact Information."]],
+   copy:"Use the full client-specific policy from the master file, not this outline. Link the actual Terms page. Never invent systems, retention periods or legal claims.",
+   faq:"10, after the policy", meta:"Title: Privacy Policy | [Brand]. Description: a factual summary of information handling.",
+   check:"Client name, dates, contacts, links, consistency with the forms. Review before publication."},
+  std:[R("Paid ads team master format word for word; never S.R. Freeman's custom policies.","Mary, Nov 21, Slack"),R("10 FAQs after the policy is a new rule: apply to new builds; launched sites without it are not QC failures.","Aryan, Nov 23 ruling; case study (0 of 19 live sites)"),R("Never write new legal wording.","Aryan's own rule, Nov 1")]},
+ {id:'terms',name:'Terms',desc:'Always exists. Does not count toward the page total.',
+  wire:[HEADER,b('hero','Page title','H1 = Terms and Conditions + business name',{inner:true,h1:'Terms and Conditions'}),b('policy','Terms text','Master format, word for word'),FAQ(10,'FAQ: 10 after the terms (new rule)'),FORMBAND(),FOOTER],
+  gel:{order:[["H1","Terms and Conditions: business name and approved effective date."],["–","Introduction: master-file wording."],["H2","Types of Messages You Will Receive."],["H2","SMS Unsubscribe / Opt-Out Instructions (HELP, frequency, rates)."],["H2","Carrier Disclaimer."],["H2","Consent Not Required for Purchase."],["H2","Age Requirement."],["H2","Privacy Policy."],["H2","Changes to These Terms."]],
+   copy:"Use the full client-specific Terms from the master file. Replace the Privacy Policy placeholder with its actual link. Extra terms go to the paid ads team.",
+   faq:"10, after the terms", meta:"Title: Terms and Conditions | [Brand]. Description: the scope of the terms and messaging program.",
+   check:"Business identity, dates, support details, links, consistency with form notices. Review before publication."},
+  std:[R("Terms “daily messages” vs opt-in “frequency varies”: change nothing, add to the team question list.","Aryan's own rule, Nov 3 (QC rule R6)")]}
+];
+
+/* ======================= RENDER HELPERS ======================= */
+var mode='desk', current='pt-home';
+try{ mode=localStorage.getItem('aws-mode')||'desk'; }catch(e){}
+try{ current=(location.hash||'').slice(1)||localStorage.getItem('aws-page')||'pt-home'; }catch(e){}
+function ph(){ return mode==='phone'; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function tagHTML(t){ if(t==='P') return '<span class="tag p">Pending Aryan</span>'; if(t==='A') return '<span class="tag a">Added Nov 23</span>'; if(t==='R') return '<span class="tag r">Replaced</span>'; if(t==='N') return '<span class="tag p">Pending Anthony</span>'; if(t==='F') return '<span class="tag p">Future, per Gelmarc</span>'; return ''; }
+function ruleLi(r){ return '<li>'+esc(r.t)+tagHTML(r.tag)+'<span class="cite">'+esc(r.c)+'</span></li>'; }
+function rulesSection(title,list){ return '<section><h3>'+title+'</h3><ul class="rules">'+list.map(ruleLi).join('')+'</ul></section>'; }
+function lines(n){ var s='',w=['','m','','s']; for(var i=0;i<n;i++) s+='<div class="ln '+w[i%4]+'"></div>'; return s; }
+function lbl(t,right){ return '<div class="lbl"><span>'+t+'</span>'+(right?'<i>'+right+'</i>':'')+'</div>'; }
+function noteHTML(bk){ var h=''; if(bk.note) h+='<span class="note">'+esc(bk.note)+'</span>'; if(bk.o.pending) h+='<span class="note p">Pending Aryan: '+esc(bk.o.pending)+'</span>'; return h; }
+
+function header(open,forcePhone){
+  if(ph()||forcePhone) return '<div class="hdr"><span class="logo">EXAMPLE BUILDERS</span><span class="callic">Call</span><span class="burger"><i></i><i></i><i></i></span></div>';
+  var nav='<span>Home</span><span class="dd">About</span><span class="dd">Services</span><span class="dd">Projects</span><span class="dd">Service Areas</span><span>Contact</span>';
+  var h='<div class="hdr"><span class="logo">EXAMPLE BUILDERS</span><div class="nav">'+nav+'</div><span class="navmini">One-line menu</span><span class="callic">Call</span><span class="btn">Get a Quote</span>';
+  if(open) h+='<div class="ddmenu" style="left:38%;top:34px">'+SVC.map(function(s){return '<div>'+s+'</div>';}).join('')+'</div>';
+  return h+'</div>';
+}
+function cardsHTML(o){
+  var n=o.n||3,out=[];
+  for(var i=0;i<n;i++){
+    var name=(o.names&&o.names[i])||'',c='<div class="card">';
+    if(!o.noimg) c+='<div class="img">'+(o.people?'Real photo':'Photo')+'</div>';
+    c+=name?'<div class="t">'+name+'</div>':'<div class="ln m" style="height:9px;background:var(--g3)"></div>';
+    c+=o.small?lines(1):lines(2);
+    if(o.btn) c+='<span class="btn ghost">'+o.btn+'</span>';
+    out.push(c+'</div>');
+  }
+  if(ph()&&(n>=3||o.slider)) return '<div class="slider">'+out.join('')+'</div><div class="dots">● ○ ○</div>';
+  var cols=ph()?(o.small?2:1):Math.min(n,4);
+  return '<div style="display:grid;grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:8px">'+out.join('')+'</div>';
+}
+function formHTML(bk){
+  var o=bk.o,f='<div class="blk '+(o.light?'light':'band')+'">'+lbl(bk.label);
+  var fields=o.detailed?['Name','Phone','Email','City','Service needed','Project details']:['Name','Phone','Email','Message'];
+  f+='<div style="display:grid;grid-template-columns:'+(ph()?'1fr':'1fr 1fr')+';gap:0 10px">';
+  fields.forEach(function(x){ f+='<div><div class="small">'+x+'</div><div class="field"></div></div>'; });
+  f+='</div>';
+  if(o.sms) f+='<div class="chk">* I consent to receive non-marketing text messages ... (required)</div><div class="chk">* I consent to receive marketing text messages ... (required)</div>';
+  f+='<div style="margin-top:7px"><span class="btn">Send Request</span></div><div class="small" style="margin-top:5px">Privacy Policy | Terms and Conditions</div>';
+  return f+noteHTML(bk)+'</div>';
+}
+function footerHTML(bk){
+  var list=function(a){ return a.map(function(s){return '<div>'+s+'</div>';}).join(''); };
+  var cols='<div class="fcols"><div><span class="logo" style="color:#fff;border-color:#8c97a5">EXAMPLE BUILDERS</span><div style="margin-top:5px">Phone (tap to call)</div><div>email@lowercase</div><div>Address only from Podio</div><div>Hours, license if confirmed</div><div>Social, Yelp, GBP (verified)</div></div>'+
+   '<div><div class="ft">Pages</div>'+list(['Home','About','FAQ','Blog','Contact'])+'</div><div><div class="ft">Services</div>'+list(SVC)+'</div><div><div class="ft">Projects</div>'+list(PRJ)+list(['Service Areas'])+'</div><div><div class="ft">Map</div><div class="map">Map</div></div></div>';
+  var bar='<div class="fbar"><span>Privacy Policy | Terms and Conditions | Cookie preferences</span><span>© 2026 Example Builders | Designed &amp; Managed by <u>Apex Operations</u></span></div>';
+  return '<div class="blk band">'+lbl(bk.label)+cols+bar+noteHTML(bk)+'</div>';
+}
+function render(bk){
+  var o=bk.o,i,s,k=bk.kind,N=noteHTML(bk);
+  switch(k){
+    case 'header': return '<div style="position:relative">'+header(false)+(N?'<div style="padding:0 12px 8px">'+N+'</div>':'')+'</div>';
+    case 'hero': return '<div class="hero'+(o.inner?' inner':'')+'"><span class="vid">'+(o.inner?'IMAGE OR VIDEO':'VIDEO, FULL SCREEN')+'</span><div class="h1">'+(o.h1||'Page Title')+'</div>'+(o.inner?'':'<div class="subt">Short subtitle, one line</div><span class="btn">Get a Quote</span>')+N+'</div>';
+    case 'split': return '<div class="blk">'+lbl(bk.label)+'<div class="split"><div><div class="h2"></div>'+lines(3)+(o.btn?'<span class="btn ghost">'+o.btn+'</span>':'')+'</div><div class="img">Photo</div></div>'+N+'</div>';
+    case 'text': return '<div class="blk">'+lbl(bk.label)+'<div class="h2"></div>'+lines(3)+N+'</div>';
+    case 'cards': return '<div class="blk">'+lbl(bk.label,o.n+' card'+(o.n>1?'s':''))+'<div class="h2"></div>'+cardsHTML(o)+(o.extraLink?'<div style="margin-top:7px"><span class="btn ghost">'+o.extraLink+'</span></div>':'')+N+'</div>';
+    case 'logos': return '<div class="blk band">'+lbl(bk.label)+'<div class="logos"><div></div><div></div><div></div>'+(ph()?'':'<div></div>')+'</div>'+N+'</div>';
+    case 'steps': s=''; for(i=1;i<=o.n;i++) s+='<div class="step"><b>'+i+'</b>Step</div>'; return '<div class="blk">'+lbl(bk.label)+'<div class="h2"></div><div class="row'+(ph()?' stack':'')+'">'+s+'</div>'+N+'</div>';
+    case 'areas': return '<div class="blk">'+lbl(bk.label)+'<div class="h2"></div><div class="split"><div class="map">County map</div><div>'+CITY.map(function(c){return '<span class="chip link">'+c+'</span>';}).join('')+'</div></div>'+N+'</div>';
+    case 'reviews': s=[]; for(i=0;i<3;i++) s.push('<div class="card"><div class="quote">“Verified review”</div><div class="small">Name, City</div></div>'); return '<div class="blk">'+lbl(bk.label)+'<div class="h2"></div>'+(ph()?'<div class="slider">'+s.join('')+'</div>':'<div class="row">'+s.join('')+'</div>')+N+'</div>';
+    case 'faq': s=''; for(i=1;i<=3;i++) s+='<div class="faqr">Question '+i+'</div>'; return '<div class="blk">'+lbl(bk.label,o.n+' questions')+s+'<div class="more">… '+o.n+' in total</div>'+N+'</div>';
+    case 'faqgroups': s=''; ['Services','Process','Coverage','Getting started'].forEach(function(t){ s+='<div style="margin:6px 0 2px;font-weight:700;font-size:12px">'+t+'</div><div class="faqr">Question</div>'; }); return '<div class="blk">'+lbl(bk.label,'20 questions')+s+'<div class="more">… about 5 per group, 20 in total</div>'+N+'</div>';
+    case 'cta': return '<div class="ctaband">'+lbl(bk.label)+'<div class="h2" style="width:50%"></div><span class="btn">Get a Quote</span>'+(o.svcLink?' <span class="btn" style="background:transparent;color:#fff;border:1px solid #fff">Service One</span>':'')+'<div>'+N+'</div></div>';
+    case 'form': return formHTML(bk);
+    case 'footer': return footerHTML(bk);
+    case 'none': return '<div class="nofaq">'+bk.label+'</div>';
+    case 'future': return '<div class="blk" style="border:2px dashed var(--g3);margin:8px 14px;border-radius:6px;opacity:.75">'+lbl(bk.label,'Future')+N+'</div>';
+    case 'chips': return '<div class="blk">'+lbl(bk.label)+o.items.map(function(c){return '<span class="chip'+(o.link?' link':'')+'">'+c+'</span>';}).join('')+N+'</div>';
+    case 'stats': return '<div class="blk">'+lbl(bk.label)+'<div class="row"><div class="card small" style="text-align:center">Result</div><div class="card small" style="text-align:center">Result</div><div class="card small" style="text-align:center">Result</div></div>'+N+'</div>';
+    case 'gallery': s=''; for(i=0;i<(ph()?4:6);i++) s+='<div class="img" style="min-height:50px">Photo</div>'; return '<div class="blk">'+lbl(bk.label)+'<div style="display:grid;grid-template-columns:repeat('+(ph()?2:3)+',1fr);gap:7px">'+s+'</div>'+N+'</div>';
+    case 'mapblk': return '<div class="blk">'+lbl(bk.label)+'<div class="map" style="min-height:110px">Coverage map</div>'+N+'</div>';
+    case 'regions': s=''; ['County One','County Two'].forEach(function(cn,ix){ s+='<div class="card"><div class="t">'+cn+'</div>'+CITY.slice(ix*3,ix*3+3).map(function(c){return '<span class="chip link">'+c+'</span>';}).join('')+'</div>'; }); return '<div class="blk">'+lbl(bk.label)+'<div class="row'+(ph()?' stack':'')+'">'+s+'</div>'+N+'</div>';
+    case 'filters': return '<div class="blk">'+lbl(bk.label)+'<span class="chip">All</span><span class="chip">Topic</span><span class="chip">Topic</span>'+N+'</div>';
+    case 'article': return '<div class="blk">'+lbl(bk.label)+'<div class="h2"></div>'+lines(3)+'<div class="h2" style="width:35%"></div>'+lines(3)+N+'</div>';
+    case 'contactinfo': return '<div class="blk">'+lbl(bk.label)+'<div class="split"><div><div class="small">Phone (tap to call)</div><div class="small">Email</div><div class="small">Hours, license (if confirmed)</div></div><div class="map">Map</div></div>'+N+'</div>';
+    case 'policy': return '<div class="blk">'+lbl(bk.label)+'<div class="h2"></div>'+lines(4)+'<div class="h2" style="width:30%"></div>'+lines(4)+'<div class="more">… full master text</div>'+N+'</div>';
+  }
+  return '';
+}
+function wireframe(blocks){ return '<div class="wf'+(ph()?' phone':'')+'" style="'+(ph()?'max-width:375px':'')+'">'+blocks.map(render).join('')+'</div>'; }
+function headerWire(){
+  var h='<div class="wf" style="'+(ph()?'max-width:375px':'')+'">';
+  h+='<div style="position:relative;padding-bottom:'+(ph()?'0':'64px')+'">'+header(!ph())+'</div>';
+  h+='<div class="small" style="padding:6px 12px">Phone menu, opened:</div><div style="max-width:375px">'+header(false,true)+'<div class="mmenu"><div>Home</div><div>About ▾</div><div class="sub">FAQ</div><div class="sub">Blog</div><div>Services ▾</div>'+SVC.map(function(x){return '<div class="sub">'+x+'</div>';}).join('')+'<div>Projects ▾</div><div>Service Areas ▾</div><div>Contact</div><div style="border:0;padding-top:6px"><span class="btn">Get a Quote</span></div></div></div></div>';
+  return h;
+}
+function footerWire(){ return wireframe([b('form','1. Form band (compulsory; hidden on Contact)','Quick inquiry form, two required SMS boxes',{sms:true}),b('footer','2. Main footer and 3. bottom bar','Address only from Podio; credit line exactly as Freeman')]); }
+
+/* ======================= NAV + DRAW ======================= */
+var NAV=[
+ {grp:'Start here',items:['owners','before','live','concepts','staging','content']},
+ {grp:'Global',items:['header','footer','forms','design','facts']},
+ {grp:'Page types',items:PT.map(function(p){return 'pt-'+p.id;})},
+ {grp:'Build and check',items:['duda','qc','showing']},
+ {grp:'Open items',items:['pending','current']}
+];
+function itemName(id){ if(id.indexOf('pt-')===0){ var p=PT.filter(function(x){return 'pt-'+x.id===id;})[0]; return p?p.name:id; } return CH[id]?CH[id].name:id; }
+function allIds(){ var a=[]; NAV.forEach(function(g){ a=a.concat(g.items); }); return a; }
+function drawNav(){
+  var h='';
+  NAV.forEach(function(g){ h+='<div class="grp">'+g.grp+'</div>'; g.items.forEach(function(id){ h+='<button type="button" data-id="'+id+'" class="'+(id===current?'on':'')+'">'+itemName(id)+'</button>'; }); });
+  document.getElementById('side').innerHTML=h;
+  try{ var on=document.querySelector('nav.side button.on'); if(on && window.innerWidth<=900) on.scrollIntoView({block:'nearest',inline:'center'}); }catch(err){}
+  document.getElementById('bDesk').className=mode==='desk'?'on':'';
+  document.getElementById('bPhone').className=mode==='phone'?'on':'';
+}
+function metaBar(){
+  return '<div class="meta"><span>Last updated: '+LAST_UPDATED+'</span><span>Sources checked: '+SOURCES.length+' (listed under How this guide stays current)</span><span>Aryan\u2019s final rulings applied; not yet reviewed by Mary</span></div>';
+}
+function legend(){
+  return '<div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Layout (developer)</span><span><i class="sw" style="background:var(--gelBg);border-color:var(--gel)"></i>Content (Gelmarc owns)</span><span><i class="sw" style="background:var(--stdBg);border-color:var(--std)"></i>Team standards</span><span><span class="tag p">Future, per Gelmarc</span> not required now</span><span><span class="tag a">Added Nov 23</span> team rule missing from the old workflow</span></div>';
+}
+function draw(){
+  var ids=allIds(); if(ids.indexOf(current)<0) current='pt-home';
+  drawNav();
+  var m='';
+  if(current.indexOf('pt-')===0){
+    var p=PT.filter(function(x){return 'pt-'+x.id===current;})[0], g=p.gel;
+    m+='<h2 class="ptitle">'+p.name+'</h2><p class="pdesc">'+esc(p.desc)+'</p>'+metaBar()+legend();
+    m+='<div class="layers'+(ph()?' phone':'')+'">';
+    m+='<div class="col wire"><h3>Layout <span class="own dev">Developer</span></h3>'+wireframe(p.wire)+'<p class="small" style="margin-top:6px">Source: layout workflow sections 3 and 7, with Aryan’s Nov 23 rulings.</p></div>';
+    m+='<div class="col"><h3>Content <span class="own gel">Gelmarc owns</span></h3><div class="box gelb"><h4>Purpose</h4><p>'+esc(p.desc)+'</p><h4>Section order and headings</h4><ol class="sec">'+g.order.map(function(x){return '<li><span class="hl">'+x[0]+'</span>'+esc(x[1])+'</li>';}).join('')+'</ol><h4>Copy and links</h4><p>'+esc(g.copy)+'</p><h4>FAQ count</h4><p>'+esc(g.faq)+'</p><h4>Metadata</h4><p>'+esc(g.meta)+'</p><h4>Page check</h4><p>'+esc(g.check)+'</p><p class="small" style="margin-top:8px">Source: Gelmarc’s Page-by-Page Website Workflow (Google Doc, read Nov 23). Content and SEO are his; developers do not rewrite them.</p></div></div>';
+    m+='<div class="col"><h3>Standards <span class="own std">Mary, Anthony, huddles</span></h3><div class="box stdb"><ul class="rules">'+p.std.map(ruleLi).join('')+'</ul></div></div>';
+    m+='</div>';
+  } else {
+    var c=CH[current];
+    m+='<h2 class="ptitle">'+c.name+'</h2><p class="pdesc">'+esc(c.desc)+'</p>'+metaBar();
+    if(current==='current') m+='<div class="chapter"><section><h3>Sources checked</h3><ul class="rules">'+SOURCES.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ul></section></div>';
+    if(c.wire==='header') m+='<div class="mini">'+headerWire()+'</div>';
+    if(c.wire==='footer') m+='<div class="mini">'+footerWire()+'</div>';
+    if(c.html) m+=c.html();
+    if(c.rules){ m+='<div class="chapter">'; c.rules.forEach(function(sec){ m+=rulesSection(sec[0],sec[1]); }); m+='</div>'; }
+  }
+  document.getElementById('main').innerHTML=m;
+}
+document.getElementById('side').addEventListener('click',function(e){
+  var t=e.target.closest('button[data-id]'); if(!t) return;
+  current=t.getAttribute('data-id');
+  try{ localStorage.setItem('aws-page',current); history.replaceState(null,'','#'+current); }catch(err){}
+  draw(); window.scrollTo(0,0);
+});
+function setMode(x){ mode=x; try{ localStorage.setItem('aws-mode',x); }catch(err){} draw(); }
+document.getElementById('bDesk').addEventListener('click',function(){ setMode('desk'); });
+document.getElementById('bPhone').addEventListener('click',function(){ setMode('phone'); });
+draw();
+})();
+</script>
+</body>
+</html>
